@@ -43,7 +43,7 @@ print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 
 subData = np.squeeze(np.asarray(resultarr))
 print(subData.shape)
-
+print(labels)
 
 
 
