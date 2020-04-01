@@ -70,7 +70,9 @@ print("built")
 
 cnn.compile(optimizer='Adam',loss='categorical_crossentropy',metrics=['accuracy'])
 cnn.summary()
-history = cnn.fit(subData,labels,epochs=50,validation_split=.2)
+train_data,test_data=tf.split(subData,[96,24])d
+train_label,test_label=tf.split(labels,[96,24])
+cnn.fit(train_data,train_label,epochs=50,validation_data=(test_data,test_label))
 print(history.history)
 #cnn.fit(dataArr,labels,epochs=1)
 
