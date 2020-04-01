@@ -9,10 +9,11 @@ from scipy.io import loadmat
 from tensorflow.data import Dataset
 
 
-classifierData=pd.read_excel("/home/ubuntu/BoldPythonML/Data/class.csv").to_numpy()
+#classifierData=pd.read_excel("/home/ubuntu/BoldPythonML/Data/class.csv").to_numpy()
 subjectData = loadmat("/home/ubuntu/BoldPythonML/Data/FullSubjectData135.mat")
-subjectData = subjectData['data1']
-classes = classifierData[:,1]
+subjectData = subjectData['S']
+#classes = classifierData[:,1]
+classes=pd.read_csv("/home/ubuntu/BoldPythonML/Data/class.csv",header=None)[0]
 #reordering subject data to fit models input
 #5.9.2.672->672.9.5.2
 print("0")
