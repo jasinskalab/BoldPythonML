@@ -9,8 +9,8 @@ from scipy.io import loadmat
 from tensorflow.data import Dataset
 
 
-classifierData=pd.read_excel("/mnt/z/Data/ben_IC/MattesonWorking/Working-Code//MachineLearning/PythonSpring2020/Data/data.xlsx").to_numpy()
-subjectData = loadmat("/mnt/z/Data/ben_IC/MattesonWorking/Working-Code//MachineLearning/PythonSpring2020/Data/initialsubdata.mat")
+classifierData=pd.read_excel("/mnt/z/Data/ben_IC/MattesonWorking/Working-Code//MachineLearning/PythonSpring2020/Data/class.csv").to_numpy()
+subjectData = loadmat("/mnt/z/Data/ben_IC/MattesonWorking/Working-Code//MachineLearning/PythonSpring2020/Data/FullSubjectData135.mat")
 subjectData = subjectData['data1']
 classes = classifierData[:,1]
 #reordering subject data to fit models input
