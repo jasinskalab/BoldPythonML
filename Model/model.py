@@ -20,14 +20,21 @@ resultarr = []
 size = classes.shape
 label=[]
 for x in range(0,size[0]):
-    if classes[x] == 'Literate':
-        label.append(0)
-    elif classes[x] == 'NonLiterate':
-        label.append(1)
+    if subjectData[0,x]['channelData'].shape == (5,9,2,672):
+        if classes[x] == 'Literate':
+            label.append(0)
+        elif classes[x] == 'NonLiterate':
+            label.append(1)
+        else:
+            label.append(2)
+    else:
+        print(x)
 for x in range(0,3):
-    print(x)
-    resultarr.append(np.transpose(subjectData[0,x]['channelData'],(3,1,0,2)))
-    
+    if subjectData[0,x]['channelData'].shape == (5,9,2,672):
+        print(x)
+        resultarr.append(np.transpose(subjectData[0,x]['channelData'],(3,1,0,2)))
+    else:
+        print(x)
 
 labels = tf.keras.utils.to_categorical(label,num_classes=3)
 
@@ -61,8 +68,13 @@ cnn.build()
 print("built")
 cnn.compile(optimizer='Adam',loss='categorical_crossentropy')
 cnn.summary()
-
-cnn.fit(dataArr,labels,epochs=1)
+cnn.compile(optimizer='Adam',loss='categorical_crossentropy',metrics=['accuracy'])
+cnn.summary()
+train_data,test_data=tf.split(dataArr,[96,24])
+train_label,test_label=tf.split(labels,[96,24])
+cnn.fit(train_data,train_label,epochs=50,validation_data=(test_data,test_label))
+cnn.evaluate(dataArr,labels,verbose=1)
+#cnn.fit(dataArr,labels,epochs=1)
 
 
 
