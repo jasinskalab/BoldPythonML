@@ -40,8 +40,8 @@ labels = tf.keras.utils.to_categorical(label,num_classes=3)
 
 print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 
-dataArr = np.squeeze(np.asarray(resultarr))
-print(dataArr.shape)
+subData = np.squeeze(np.asarray(resultarr))
+print(subData.shape)
 
 
 
@@ -66,14 +66,12 @@ cnn.add(layers.Dense(units=3))
 cnn.add(layers.Softmax())
 cnn.build()
 print("built")
-cnn.compile(optimizer='Adam',loss='categorical_crossentropy')
-cnn.summary()
+
 cnn.compile(optimizer='Adam',loss='categorical_crossentropy',metrics=['accuracy'])
 cnn.summary()
-train_data,test_data=tf.split(dataArr,[96,24])
-train_label,test_label=tf.split(labels,[96,24])
-cnn.fit(train_data,train_label,epochs=50,validation_data=(test_data,test_label))
+history = cnn.fit(subData,labels,epochs=50,validation_split=.2,metrics=['accuracy'])
 cnn.evaluate(dataArr,labels,verbose=1)
+print(history.history)
 #cnn.fit(dataArr,labels,epochs=1)
 
 
