@@ -6,17 +6,23 @@ import random
 import numpy as np
 import pandas as pd
 from scipy.io import loadmat
-from tensorflow.data import Dataset
+#from tensorflow.data import Dataset
+import sys
 from sklearn.model_selection import KFold
 
-DataPath="/home/ubuntu/BoldPythonML/Data/FullSubjectData135.mat"
-ClassPath="/home/ubuntu/BoldPythonML/Data/class.csv"
-Epochs=10
+if len(sys.argv)==4:
+    DataPath=sys.argv[1]
+    ClassPath=sys.argv[2]
+    Epochs=int(sys.argv[3])
+else:
+    print("Usage: model_with_input.py DataPath ClassPath Epochs")
+    sys.exit()
+
 #classifierData=pd.read_excel("/home/ubuntu/BoldPythonML/Data/class.csv").to_numpy()
-subjectData = loadmat("/home/ubuntu/BoldPythonML/Data/FullSubjectData135.mat")
+subjectData = loadmat(DataPath)
 subjectData = subjectData['S']
 #classes = classifierData[:,1]
-classes=pd.read_csv("/home/ubuntu/BoldPythonML/Data/class.csv",header=None)[0]
+classes=pd.read_csv(ClassPath,header=None)[0]
 #reordering subject data to fit models input
 #5.9.2.672->672.9.5.2
 print("0")
@@ -33,7 +39,7 @@ for x in range(0,size[0]):
             label.append(2)
     else:
         print(x)
-for x in range(0,3):
+for x in range(0,size[0]):
     if subjectData[0,x]['channelData'].shape == (5,9,2,672):
         print(x)
         resultarr.append(np.transpose(subjectData[0,x]['channelData'],(3,1,0,2)))
@@ -71,12 +77,11 @@ cnn.add(layers.Softmax())
 cnn.build()
 print("built")
 
-cnn.compile(optimizer='Adam',loss='categorical_crossentropy',metrics=['accuracy'])
-cnn.summary()
-for train_index,test_index in KFold(5).split(dataArr):
-    x_train,x_test=dataArr[train_index],dataArr[test_index]
+for train_index,test_index in KFold(5).split(subData):
+    x_train,x_test=subData[train_index],subData[test_index]
     y_train,y_test=labels[train_index],labels[test_index]
-    
+    cnn.compile(optimizer='Adam',loss='categorical_crossentropy',metrics=['accuracy'])
+    cnn.summary()
     cnn.fit(x_train, y_train,epochs=Epochs)
     
     print('Model evaluation ',cnn.evaluate(x_test,y_test,verbose=1))
@@ -84,6 +89,7 @@ for train_index,test_index in KFold(5).split(dataArr):
 train_label,test_label=tf.split(labels,[96,24])
 cnn.fit(train_data,train_label,epochs=50,validation_data=(test_data,test_label))'''
 print(history.history)
+
 #cnn.fit(dataArr,labels,epochs=1)
 
 
