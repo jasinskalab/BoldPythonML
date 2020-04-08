@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
 import tensorflow as tf
 from tensorflow.keras import layers
 import csv
@@ -9,9 +12,7 @@ from scipy.io import loadmat
 #from tensorflow.data import Dataset
 import sys
 from sklearn.model_selection import KFold
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
 
 from datetime import datetime
 import io
