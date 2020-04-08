@@ -51,7 +51,7 @@ else:
     print("Usage: model_with_input.py DataPath Epochs")
     sys.exit()
 
-!rm -rf logs/image
+
 
 logdir = "logs/image/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 # Define the basic TensorBoard callback.
