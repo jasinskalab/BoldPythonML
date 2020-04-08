@@ -43,6 +43,8 @@ subjectData = subjectData['DeidentifiedData']
 #5.9.2.672->672.9.5.2
 print("0")
 resultarr = []
+size = subjectData['classifier'].shape
+print("this is the size"+size)
 label=[]
 lit = 0
 nl = 0
