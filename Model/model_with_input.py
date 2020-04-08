@@ -23,7 +23,7 @@ def genmodel():
     cnn.add(layers.Dense(units=3))
     cnn.add(layers.Softmax())
     cnn.build()
-    cnn.compile(optimizer='Adam',loss='categorical_crossentropy',metrics=['accuracy'])
+    cnn.compile(optimizer='Adam',loss='categorical_crossentropy',metrics=['accuracy','true_positive','true_negative','false_positive','false_negative'])
     return cnn
 
 if len(sys.argv)==3:
@@ -51,10 +51,10 @@ nl = 0
 sl = 0
 for x in range(0,size[1]):#0,1,2 which represent literate semiliterate nonliterate
     if subjectData[0,x]['channelData'].shape == (5,9,2,672):
-        if subjectData[0,x]['score'] >= 40:
+        if subjectData[0,x]['score'] >= 10:
             lit = lit+1
             label.append(0)
-        elif subjectData[0,x]['score'] >= 10:
+        elif subjectData[0,x]['score'] >= 1:
             label.append(1)
             nl=nl+1
         else:
@@ -68,9 +68,9 @@ for x in range(0,size[1]):
         resultarr.append(np.transpose(subjectData[0,x]['channelData'],(3,1,0,2)))
     else:
         print(x)
-print("Literacy Number"+str(lit)+"\n")
-print("NonLit Number"+str(nl)+"\n")
-print("Semilit number"+str(sl)+"\n")
+print("Literacy Number "+str(lit))
+print("NonLit Number "+str(nl))
+print("Semilit number "+str(sl))
 labels = tf.keras.utils.to_categorical(label,num_classes=3)
 
 print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
