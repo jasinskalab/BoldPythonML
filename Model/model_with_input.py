@@ -9,7 +9,22 @@ from scipy.io import loadmat
 #from tensorflow.data import Dataset
 import sys
 from sklearn.model_selection import KFold
-import sklearn
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
+from datetime import datetime
+import io
+import itertools
+from packaging import version
+from six.moves import range
+
+
+from tensorflow import keras
+
+import matplotlib.pyplot as plt
+
+import sklearn.metrics
 def log_confusion_matrix(epoch, logs):
   # Use the model to predict the values from the validation dataset.
   test_pred_raw = model.predict(test_images)
