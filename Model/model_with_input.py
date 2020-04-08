@@ -43,25 +43,33 @@ subjectData = subjectData['DeidentifiedData']
 #5.9.2.672->672.9.5.2
 print("0")
 resultarr = []
-size = len(subjectData[0])#classes.shape
+size = classes.shape
 label=[]
-for x in range(0,size):
+lit = 0
+nl = 0
+sl = 0
+for x in range(0,size[0]):#0,1,2 which represent literate semiliterate nonliterate
     if subjectData[0,x]['channelData'].shape == (5,9,2,672):
         if subjectData[0,x]['score'] >= 40:
+            lit = lit+1
             label.append(0)
         elif subjectData[0,x]['score'] >= 10:
             label.append(1)
+            nl=nl+1
         else:
+            sl=sl+1
             label.append(2)
     else:
         print(x)
-for x in range(0,size):
+for x in range(0,size[0]):
     if subjectData[0,x]['channelData'].shape == (5,9,2,672):
         print(x)
         resultarr.append(np.transpose(subjectData[0,x]['channelData'],(3,1,0,2)))
     else:
         print(x)
-
+print("Literacy Number"+lit+"\n")
+print("NonLit Number"+nl+"\n")
+print("Semilit number"+sl+"\n")
 labels = tf.keras.utils.to_categorical(label,num_classes=3)
 
 print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
