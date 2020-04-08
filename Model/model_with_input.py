@@ -43,13 +43,13 @@ subjectData = subjectData['DeidentifiedData']
 #5.9.2.672->672.9.5.2
 print("0")
 resultarr = []
-size = subjectData['classifier'].shape
+size = subjectData.shape
 print(size)
 label=[]
 lit = 0
 nl = 0
 sl = 0
-for x in range(0,size[0]):#0,1,2 which represent literate semiliterate nonliterate
+for x in range(0,size[1]):#0,1,2 which represent literate semiliterate nonliterate
     if subjectData[0,x]['channelData'].shape == (5,9,2,672):
         if subjectData[0,x]['score'] >= 40:
             lit = lit+1
@@ -62,7 +62,7 @@ for x in range(0,size[0]):#0,1,2 which represent literate semiliterate nonlitera
             label.append(2)
     else:
         print(x)
-for x in range(0,size[0]):
+for x in range(0,size[1]):
     if subjectData[0,x]['channelData'].shape == (5,9,2,672):
         print(x)
         resultarr.append(np.transpose(subjectData[0,x]['channelData'],(3,1,0,2)))
