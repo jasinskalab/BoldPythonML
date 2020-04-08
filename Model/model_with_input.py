@@ -36,7 +36,11 @@ else:
 
 #classifierData=pd.read_excel("/home/ubuntu/BoldPythonML/Data/class.csv").to_numpy()
 subjectData = loadmat(DataPath)
+<<<<<<< HEAD
 subjectData = subjectData['DeidentifiedData']
+=======
+subjectData = subjectData['S']
+>>>>>>> origin/master
 #classes = classifierData[:,1]
 classes=pd.read_csv(ClassPath,header=None)[0]
 #reordering subject data to fit models input
