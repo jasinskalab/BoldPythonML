@@ -68,9 +68,9 @@ for x in range(0,size[1]):
         resultarr.append(np.transpose(subjectData[0,x]['channelData'],(3,1,0,2)))
     else:
         print(x)
-print("Literacy Number"+lit+"\n")
-print("NonLit Number"+nl+"\n")
-print("Semilit number"+sl+"\n")
+print("Literacy Number"+str(lit)+"\n")
+print("NonLit Number"+str(nl)+"\n")
+print("Semilit number"+str(sl)+"\n")
 labels = tf.keras.utils.to_categorical(label,num_classes=3)
 
 print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
