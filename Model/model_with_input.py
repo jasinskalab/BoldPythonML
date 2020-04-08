@@ -10,6 +10,22 @@ from scipy.io import loadmat
 import sys
 from sklearn.model_selection import KFold
 
+def genmodel():
+    cnn=tf.keras.Sequential()
+    cnn.add(layers.TimeDistributed(layers.Conv2D(96,(2,2),strides=(1,1),activation='relu'),input_shape=(672,9,5,2)))# (5,9,2,672) is the exact shape that data.mat has when loaded with loadmat. Values should be added dynamically #TODO
+    cnn.add(layers.TimeDistributed(layers.MaxPool2D(pool_size=(2,2),strides=(1,1))))
+    cnn.add(layers.TimeDistributed(layers.Conv2D(96,(2,2),strides=(1,1))))
+    cnn.add(layers.TimeDistributed(layers.MaxPool2D(pool_size=(2,2),strides=(1,1))))
+    cnn.add(layers.TimeDistributed(layers.Flatten()))
+    cnn.add(layers.LSTM(units=512,input_shape=(10,512)))
+    cnn.add(layers.Dense(units=64))
+    cnn.add(layers.Dropout(rate=0.33))
+    cnn.add(layers.Dense(units=3))
+    cnn.add(layers.Softmax())
+    cnn.build()
+    cnn.compile(optimizer='Adam',loss='categorical_crossentropy',metrics=['accuracy'])
+    return cnn
+
 if len(sys.argv)==4:
     DataPath=sys.argv[1]
     ClassPath=sys.argv[2]
@@ -58,7 +74,7 @@ print(subData.shape)
 
 
 
-cnn=tf.keras.Sequential()
+'''cnn=tf.keras.Sequential()
 #input shape is (n samples, image width, image height, n channels)
 # 4D tensor with shape: (samples, channels, rows, cols) if data_format='channels_first' or 4D tensor with shape:
 # (samples, rows, cols, channels) if data_format='channels_last'.
@@ -71,24 +87,24 @@ cnn.add(layers.TimeDistributed(layers.MaxPool2D(pool_size=(2,2),strides=(1,1))))
 cnn.add(layers.TimeDistributed(layers.Flatten()))
 cnn.add(layers.LSTM(units=512,input_shape=(10,512)))
 cnn.add(layers.Dense(units=64))
-cnn.add(layers.Dropout(rate=0.25))
+cnn.add(layers.Dropout(rate=0.33))
 cnn.add(layers.Dense(units=3))
 cnn.add(layers.Softmax())
 cnn.build()
-print("built")
+print("built")'''
 
 for train_index,test_index in KFold(5).split(subData):
     x_train,x_test=subData[train_index],subData[test_index]
     y_train,y_test=labels[train_index],labels[test_index]
-    cnn.compile(optimizer='Adam',loss='categorical_crossentropy',metrics=['accuracy'])
-    cnn.summary()
+    cnn=genmodel()
+    #cnn.summary()
     cnn.fit(x_train, y_train,epochs=Epochs)
     
     print('Model evaluation ',cnn.evaluate(x_test,y_test,verbose=1))
 '''train_data,test_data=tf.split(subData,[96,24])d
 train_label,test_label=tf.split(labels,[96,24])
 cnn.fit(train_data,train_label,epochs=50,validation_data=(test_data,test_label))'''
-print(history.history)
+cnn.evaluate(subData,labels,verbose=1)
 
 #cnn.fit(dataArr,labels,epochs=1)
 
@@ -183,3 +199,4 @@ def generateSubjectData(folder, trialSpec, resampleRate):
                     filelist.append(os.path.join(r,filelist))
     random.shuffle(filelist)
     data=pd.read_csv(txt,sep="\t",header=34)
+
