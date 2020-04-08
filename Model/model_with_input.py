@@ -23,7 +23,7 @@ def genmodel():
     cnn.add(layers.Dense(units=3))
     cnn.add(layers.Softmax())
     cnn.build()
-    cnn.compile(optimizer='Adam',loss='categorical_crossentropy',metrics=['accuracy','true_positive','true_negative','false_positive','false_negative'])
+    cnn.compile(optimizer='Adam',loss='categorical_crossentropy',metrics=['accuracy','true_positives','true_negatives','false_positives','false_negatives'])
     return cnn
 
 if len(sys.argv)==3:
