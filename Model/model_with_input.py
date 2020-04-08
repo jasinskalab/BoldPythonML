@@ -44,7 +44,7 @@ subjectData = subjectData['DeidentifiedData']
 print("0")
 resultarr = []
 size = subjectData['classifier'].shape
-print("this is the size"+size)
+print(size)
 label=[]
 lit = 0
 nl = 0
