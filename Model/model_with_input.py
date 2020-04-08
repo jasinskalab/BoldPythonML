@@ -26,36 +26,36 @@ def genmodel():
     cnn.compile(optimizer='Adam',loss='categorical_crossentropy',metrics=['accuracy'])
     return cnn
 
-if len(sys.argv)==4:
+if len(sys.argv)==3:
     DataPath=sys.argv[1]
-    ClassPath=sys.argv[2]
-    Epochs=int(sys.argv[3])
+    #ClassPath=sys.argv[2]
+    Epochs=int(sys.argv[2])
 else:
-    print("Usage: model_with_input.py DataPath ClassPath Epochs")
+    print("Usage: model_with_input.py DataPath Epochs")
     sys.exit()
 
 #classifierData=pd.read_excel("/home/ubuntu/BoldPythonML/Data/class.csv").to_numpy()
 subjectData = loadmat(DataPath)
 subjectData = subjectData['DeidentifiedData']
 #classes = classifierData[:,1]
-classes=pd.read_csv(ClassPath,header=None)[0]
+#classes=pd.read_csv(ClassPath,header=None)[0]
 #reordering subject data to fit models input
 #5.9.2.672->672.9.5.2
 print("0")
 resultarr = []
-size = classes.shape
+size = len(subjectData[0])#classes.shape
 label=[]
-for x in range(0,size[0]):
+for x in range(0,size):
     if subjectData[0,x]['channelData'].shape == (5,9,2,672):
-        if classes[x] == 'Literate':
+        if subjectData[0,x]['score'] >= 40:
             label.append(0)
-        elif classes[x] == 'NonLiterate':
+        elif subjectData[0,x]['score'] >= 10:
             label.append(1)
         else:
             label.append(2)
     else:
         print(x)
-for x in range(0,size[0]):
+for x in range(0,size):
     if subjectData[0,x]['channelData'].shape == (5,9,2,672):
         print(x)
         resultarr.append(np.transpose(subjectData[0,x]['channelData'],(3,1,0,2)))
