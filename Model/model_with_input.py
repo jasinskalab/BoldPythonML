@@ -43,7 +43,6 @@ subjectData = subjectData['DeidentifiedData']
 #5.9.2.672->672.9.5.2
 print("0")
 resultarr = []
-size = classes.shape
 label=[]
 lit = 0
 nl = 0
