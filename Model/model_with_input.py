@@ -9,6 +9,23 @@ from scipy.io import loadmat
 #from tensorflow.data import Dataset
 import sys
 from sklearn.model_selection import KFold
+import sklearn
+def log_confusion_matrix(epoch, logs):
+  # Use the model to predict the values from the validation dataset.
+  test_pred_raw = model.predict(test_images)
+  test_pred = np.argmax(test_pred_raw, axis=1)
+
+  # Calculate the confusion matrix.
+  cm = sklearn.metrics.confusion_matrix(test_labels, test_pred)
+  # Log the confusion matrix as an image summary.
+  figure = plot_confusion_matrix(cm, class_names=class_names)
+  cm_image = plot_to_image(figure)
+
+  # Log the confusion matrix as an image summary.
+  with file_writer_cm.as_default():
+    tf.summary.image("Confusion Matrix", cm_image, step=epoch)
+
+
 
 def genmodel():
     cnn=tf.keras.Sequential()
@@ -23,7 +40,7 @@ def genmodel():
     cnn.add(layers.Dense(units=3))
     cnn.add(layers.Softmax())
     cnn.build()
-    cnn.compile(optimizer='Adam',loss='categorical_crossentropy',metrics=['accuracy','true_positives','true_negatives','false_positives','false_negatives'])
+    cnn.compile(optimizer='Adam',loss='categorical_crossentropy',metrics=['accuracy'])
     return cnn
 
 if len(sys.argv)==3:
@@ -34,6 +51,15 @@ else:
     print("Usage: model_with_input.py DataPath Epochs")
     sys.exit()
 
+!rm -rf logs/image
+
+logdir = "logs/image/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+# Define the basic TensorBoard callback.
+tensorboard_callback = keras.callbacks.TensorBoard(log_dir=logdir)
+file_writer_cm = tf.summary.create_file_writer(logdir + '/cm')
+
+# Define the per-epoch callback.
+cm_callback = keras.callbacks.LambdaCallback(on_epoch_end=log_confusion_matrix)
 #classifierData=pd.read_excel("/home/ubuntu/BoldPythonML/Data/class.csv").to_numpy()
 subjectData = loadmat(DataPath)
 subjectData = subjectData['DeidentifiedData']
@@ -41,6 +67,8 @@ subjectData = subjectData['DeidentifiedData']
 #classes=pd.read_csv(ClassPath,header=None)[0]
 #reordering subject data to fit models input
 #5.9.2.672->672.9.5.2
+
+
 print("0")
 resultarr = []
 size = subjectData.shape
