@@ -74,10 +74,10 @@ nl = 0
 sl = 0
 for x in range(0,size[1]):#0,1,2 which represent literate semiliterate nonliterate
     if subjectData[0,x]['channelData'].shape == (5,9,2,672):
-        if subjectData[0,x]['score'] >= 10:
+        if subjectData[0,x]['score'] >= 20:
             lit = lit+1
             label.append(0)
-        elif subjectData[0,x]['score'] >= 1:
+        elif subjectData[0,x]['score'] >= 2:
             label.append(1)
             nl=nl+1
         else:
