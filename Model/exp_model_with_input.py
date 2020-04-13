@@ -155,19 +155,18 @@ cnn.add(layers.Dense(units=3))
 cnn.add(layers.Softmax())
 cnn.build()
 print("built")'''
+x_train,x_test=subData[train_index],subData[test_index]
+y_train,y_test=labels[train_index],labels[test_index]
+cnn=genmodel()
+#cnn.summary()
+cnn.fit(subData, labels,epochs=Epochs)
 
-for train_index,test_index in KFold(1).split(subData):
-    x_train,x_test=subData[train_index],subData[test_index]
-    y_train,y_test=labels[train_index],labels[test_index]
-    cnn=genmodel()
-    #cnn.summary()
-    cnn.fit(x_train, y_train,epochs=Epochs)
+
+
     
-    print('Model evaluation ',cnn.evaluate(x_test,y_test,verbose=1))
 '''train_data,test_data=tf.split(subData,[96,24])d
 train_label,test_label=tf.split(labels,[96,24])
-cnn.fit(train_data,train_label,epochs=50,validation_data=(test_data,test_label))'''
-cnn.evaluate(subData,labels,verbose=1)
+
 
 #cnn.fit(dataArr,labels,epochs=1)
 
