@@ -159,13 +159,13 @@ x_train,x_test=subData[train_index],subData[test_index]
 y_train,y_test=labels[train_index],labels[test_index]
 cnn=genmodel()
 #cnn.summary()
-cnn.fit(subData, labels,epochs=Epochs)
-
+cnn.fit(subData,labels,epochs=Epochs)
 
 
     
 '''train_data,test_data=tf.split(subData,[96,24])d
 train_label,test_label=tf.split(labels,[96,24])
+cnn.fit(train_data,train_label,epochs=50,validation_data=(test_data,test_label))'''
 
 
 #cnn.fit(dataArr,labels,epochs=1)
