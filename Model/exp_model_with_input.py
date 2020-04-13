@@ -155,8 +155,6 @@ cnn.add(layers.Dense(units=3))
 cnn.add(layers.Softmax())
 cnn.build()
 print("built")'''
-x_train,x_test=subData[train_index],subData[test_index]
-y_train,y_test=labels[train_index],labels[test_index]
 cnn=genmodel()
 #cnn.summary()
 cnn.fit(subData,labels,epochs=Epochs)
