@@ -28,30 +28,39 @@ import sklearn.metrics
 
 
 def genmodel():
-
+    
     def custom_train_step(keras_model):
         original_train_step = keras_model.train_step
 
         def print_data_and_train_step(original_data):
             # Basically copied one-to-one from https://git.io/JvDTv
+            f = open("/home/ubuntu/BoldPythonML/Output/batchoutput.txt",'a')
+            f.write("\n\nPrediction Data \n\n")
+
             data = data_adapter.expand_1d(original_data)
             x, y_true, w = data_adapter.unpack_x_y_sample_weight(data)
             y_pred = keras_model(x, training=True)
-
+            
             # this is pretty much like on_train_batch_begin
-            K.print_tensor(w, "Sample weight (w) =")
-            K.print_tensor(x, "Batch input (x) =")
-            K.print_tensor(y_true, "Batch output (y_true) =")
-            K.print_tensor(y_pred, "Prediction (y_pred) =")
-
+            # K.print_tensor(w, "Sample weight (w) =")
+            # tf.print(w,summarize=-1)
+            # K.print_tensor(y_true, "Batch output (y_true) =")
+            tf.print(y_true,summarize=-1,output_stream="file:///home/ubuntu/BoldPythonML/Output/batchoutput.txt")
+            # K.print_tensor(y_pred, "Prediction (y_pred) =")
+            tf.print(tf.math.argmax(y_pred,1),summarize=-1,output_stream="file:///home/ubuntu/BoldPythonML/Output/batchoutput.txt")
+            
+            tf.print(y_pred,summarize=-1,output_stream="file:///home/ubuntu/BoldPythonML/Output/batchoutput.txt")
+            
+            f.write("\n")
+            
             result = original_train_step(original_data)
-
+            f.close()
             # add anything here for on_train_batch_end-like behavior
 
             return result
         return print_data_and_train_step
 
-
+    
     cnn=tf.keras.Sequential()
     cnn.add(layers.TimeDistributed(layers.Conv2D(96,(2,2),strides=(1,1),activation='relu'),input_shape=(672,9,5,2)))# (5,9,2,672) is the exact shape that data.mat has when loaded with loadmat. Values should be added dynamically #TODO
     cnn.add(layers.TimeDistributed(layers.MaxPool2D(pool_size=(2,2),strides=(1,1))))
@@ -127,7 +136,7 @@ print("NonLit Number "+str(nl))
 print("Semilit number "+str(sl))
 labels = tf.keras.utils.to_categorical(label,num_classes=3)
 
-print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+print("\n\n\n\n")
 
 subData = np.squeeze(np.asarray(resultarr))
 print(subData.shape)
@@ -157,7 +166,8 @@ cnn.build()
 print("built")'''
 cnn=genmodel()
 #cnn.summary()
-cnn.fit(subData,labels,epochs=Epochs)
+batch_size=24
+cnn.fit(subData,labels,epochs=Epochs, batch_size=batch_size,use_multiprocessing=True)
 
 
     
